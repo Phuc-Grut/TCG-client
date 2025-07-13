@@ -299,7 +299,10 @@ function Home() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-amber-50">
-      <ContactModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      <ContactModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
 
       {/* <Header /> */}
 
@@ -371,7 +374,6 @@ function Home() {
                 Liên hệ tư vấn
               </button>
             </div>
-            
           </div>
         </div>
       </section>
@@ -2602,7 +2604,10 @@ function Home() {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16">
-            <button className="bg-white text-amber-600 px-10 py-5 rounded-full font-bold text-lg hover:bg-yellow-50 transform hover:scale-105 transition-all duration-300 shadow-xl hover:shadow-2xl flex items-center gap-3 group">
+            <button
+              onClick={() => setIsModalOpen(true)}
+              className="bg-white text-amber-600 px-10 py-5 rounded-full font-bold text-lg hover:bg-yellow-50 transform hover:scale-105 transition-all duration-300 shadow-xl hover:shadow-2xl flex items-center gap-3 group"
+            >
               <div className="w-8 h-8 bg-gradient-to-r from-amber-500 to-orange-500 rounded-full flex items-center justify-center group-hover:rotate-12 transition-transform duration-300">
                 <svg
                   width="16"
@@ -2626,7 +2631,7 @@ function Home() {
               Liên hệ ngay
             </button>
 
-            <button className="border-2 border-white text-white px-10 py-5 rounded-full font-bold text-lg hover:bg-white/10 transition-all duration-300 flex items-center gap-3 group">
+            {/* <button className="border-2 border-white text-white px-10 py-5 rounded-full font-bold text-lg hover:bg-white/10 transition-all duration-300 flex items-center gap-3 group">
               <div className="w-8 h-8 border-2 border-white rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
                 <svg
                   width="16"
@@ -2643,7 +2648,7 @@ function Home() {
                 </svg>
               </div>
               Tư vấn miễn phí
-            </button>
+            </button> */}
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">

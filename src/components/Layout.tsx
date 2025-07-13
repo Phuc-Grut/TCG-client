@@ -26,7 +26,7 @@ export default function Layout() {
       </main>
 
       {/* Footer */}
-      <Footer />
+      <Footer onOpenModal={handleOpenModal}/>
 
       {/* Modal đặt ở ngoài để không bị ảnh hưởng bởi header */}
       <ContactModal isOpen={isModalOpen} onClose={handleCloseModal} />

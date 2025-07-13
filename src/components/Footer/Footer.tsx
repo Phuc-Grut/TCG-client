@@ -1,4 +1,22 @@
-function Footer() {
+type FooterProps = {
+  onOpenModal: () => void;
+};
+
+type NavItem = {
+  name: string;
+  href?: string;
+  onClick?: () => void;
+};
+
+function Footer({ onOpenModal }: FooterProps) {
+  const navItems: NavItem[] = [
+    { name: "TRANG CHỦ", href: "#home" },
+    { name: "GIẢI PHÁP", href: "#linh-vuc-hoat-dong" },
+    { name: "SẢN PHẨM", href: "#san-pham" },
+    { name: "HỆ THỐNG", href: "#he-thong" },
+    { name: "VỀ CHÚNG TÔI", href: "#ve-chung-toi" },
+    { name: "LIÊN HỆ", onClick: onOpenModal },
+  ];
   return (
     <footer className="bg-gradient-to-br from-gray-900 via-slate-800 to-gray-900 relative overflow-hidden">
       {/* Background decorations */}
@@ -93,19 +111,32 @@ function Footer() {
               </h4>
               <ul className="space-y-4">
                 {[
-                  "Trang chủ",
-                  "Giải pháp",
-                  "Sản phẩm",
-                  "Dịch vụ",
-                  "Về chúng tôi",
-                  "Liên hệ",
-                  "Blog",
-                  "Tuyển dụng",
+                  {
+                    name: "TRANG CHỦ",
+                    onClick: () =>
+                      window.scrollTo({ top: 0, behavior: "smooth" }),
+                  },
+                  { name: "GIẢI PHÁP", href: "#linh-vuc-hoat-dong" },
+                  { name: "SẢN PHẨM", href: "#san-pham" },
+                  { name: "HỆ THỐNG", href: "#he-thong" },
+                  { name: "VỀ CHÚNG TÔI", href: "#ve-chung-toi" },
+                  { name: "LIÊN HỆ", onClick: onOpenModal },
                 ].map((item, index) => (
                   <li key={index}>
-                    <a
-                      href="#"
-                      className="text-gray-300 hover:text-amber-400 transition-colors duration-300 flex items-center gap-2 group"
+                    <button
+                      onClick={() => {
+                        if (item.href) {
+                          const id = item.href.replace("#", "");
+                          const section = document.getElementById(id);
+                          if (section) {
+                            section.scrollIntoView({ behavior: "smooth" });
+                          }
+                        }
+                        if (item.onClick) {
+                          item.onClick();
+                        }
+                      }}
+                      className="text-left w-full text-gray-300 hover:text-amber-400 transition-colors duration-300 flex items-center gap-2 group"
                     >
                       <svg
                         width="4"
@@ -115,8 +146,8 @@ function Footer() {
                       >
                         <circle cx="2" cy="2" r="2" fill="currentColor" />
                       </svg>
-                      {item}
-                    </a>
+                      {item.name}
+                    </button>
                   </li>
                 ))}
               </ul>
@@ -176,7 +207,7 @@ function Footer() {
                     </svg>
                   </div>
                   <div>
-                    <div className="text-white font-semibold">0935 772 929</div>
+                    <div className="text-white font-semibold">0868 908 615</div>
                     <div className="text-gray-300 text-sm">Hotline 24/7</div>
                   </div>
                 </div>
@@ -199,7 +230,7 @@ function Footer() {
                   </div>
                   <div>
                     <div className="text-white font-semibold">
-                      contact@gttjsc.vn
+                      info@toancautech.vn
                     </div>
                     <div className="text-gray-300 text-sm">Email hỗ trợ</div>
                   </div>
