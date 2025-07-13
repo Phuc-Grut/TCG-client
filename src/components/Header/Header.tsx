@@ -108,7 +108,7 @@ function Header({ onOpenModal }: HeaderProps) {
                     HOTLINE HỖ TRỢ
                   </span>
                   <span className="text-lg font-bold text-white group-hover:scale-105 transition-transform duration-300">
-                    0935 772 929
+                    0868 908 615
                   </span>
                 </div>
 
@@ -147,7 +147,7 @@ function Header({ onOpenModal }: HeaderProps) {
                     EMAIL LIÊN HỆ
                   </span>
                   <span className="text-lg font-bold text-white group-hover:scale-105 transition-transform duration-300">
-                    contact@gttjsc.vn
+                    info@toancautech.vn
                   </span>
                 </div>
 
