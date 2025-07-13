@@ -1,7 +1,13 @@
 import React, { useRef, useState } from "react";
 import emailjs from "@emailjs/browser";
 
-const ContactModal = ({ onClose }) => {
+
+type Props = {
+  isOpen: boolean;
+  onClose: () => void;
+};
+
+const ContactModal = ({ isOpen, onClose }: Props) => {
   const formRef = useRef<HTMLFormElement>(null);
   const [isSent, setIsSent] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -64,6 +70,7 @@ const ContactModal = ({ onClose }) => {
         setErrorMessage("Không thể gửi thông tin. Vui lòng thử lại sau.");
       });
   };
+  if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 z-50 bg-black/40 grid place-items-center px-4">
