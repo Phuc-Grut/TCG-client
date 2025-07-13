@@ -1,7 +1,7 @@
 import Header from "./Header/Header";
 import Footer from "./Footer/Footer";
 import { Outlet } from "react-router-dom";
-import ContactModal from "./ContactModal"; // nhớ đúng đường dẫn import
+import ContactModal from "./ContactModal";
 import { useState } from "react";
 
 export default function Layout() {
@@ -16,20 +16,17 @@ export default function Layout() {
   };
 
   return (
-    <>
-      {/* Truyền hàm mở modal xuống Header */}
+    <div>
+      {" "}
       <Header onOpenModal={handleOpenModal} />
-
-      {/* Phần chính */}
-      <main className="min-h-[80vh] px-4">
+      {/* Main content */}
+      <main className="min-h-[80vh] px-4 overflow-x-hidden">
         <Outlet />
       </main>
-
       {/* Footer */}
-      <Footer onOpenModal={handleOpenModal}/>
-
-      {/* Modal đặt ở ngoài để không bị ảnh hưởng bởi header */}
+      <Footer onOpenModal={handleOpenModal} />
+      {/* Modal */}
       <ContactModal isOpen={isModalOpen} onClose={handleCloseModal} />
-    </>
+    </div>
   );
 }

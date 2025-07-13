@@ -1,7 +1,4 @@
 import React, { JSX, useEffect, useState } from "react";
-import Header from "../../components/Header/Header";
-import Footer from "../../components/Footer/Footer";
-import OrganizationChart from "../../components/OrganizationChart";
 import Lenis, { LenisOptions } from "lenis";
 import AOS from "aos";
 import "aos/dist/aos.css";
