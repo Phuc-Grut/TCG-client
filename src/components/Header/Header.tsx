@@ -1,15 +1,27 @@
 import React, { useState, useEffect } from "react";
+import ContactModal from "../ContactModal";
 
-function Header() {
+type HeaderProps = {
+  onOpenModal: () => void;
+};
+
+type NavItem = {
+  name: string;
+  href?: string;
+  onClick?: () => void;
+};
+
+function Header({ onOpenModal }: HeaderProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [activeItem, setActiveItem] = useState("TRANG CHỦ");
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
   useEffect(() => {
-    let timeoutId = null;
+    let timeoutId: ReturnType<typeof setTimeout> | null = null;
 
     const handleScroll = () => {
       if (timeoutId) {
@@ -27,13 +39,21 @@ function Header() {
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
+
     return () => {
       window.removeEventListener("scroll", handleScroll);
-      if (timeoutId) {
-        clearTimeout(timeoutId);
-      }
+      if (timeoutId) clearTimeout(timeoutId);
     };
   }, []);
+
+  const navItems: NavItem[] = [
+    { name: "TRANG CHỦ", href: "#home" },
+    { name: "GIẢI PHÁP", href: "#linh-vuc-hoat-dong" },
+    { name: "SẢN PHẨM", href: "#san-pham" },
+    { name: "HỆ THỐNG", href: "#he-thong" },
+    { name: "VỀ CHÚNG TÔI", href: "#ve-chung-toi" },
+    { name: "LIÊN HỆ", onClick: onOpenModal },
+  ];
 
   return (
     <header
@@ -167,7 +187,7 @@ function Header() {
                     Hà Nội, Việt Nam
                   </span>
                   <span className="text-sm text-gray-300 group-hover:text-gray-200 transition-colors duration-300">
-                    Hưng Phúc, Yên Sở
+                    Số 77, phố Hưng Phúc, tổ 16, Phường Yên Sở
                   </span>
                 </div>
 
@@ -285,51 +305,33 @@ function Header() {
             {/* Navigation with compact design */}
             <nav className="hidden lg:flex items-center">
               <div className="flex items-center gap-1 bg-white/15 backdrop-blur-md rounded-full px-2 py-2 border border-white/30">
-                {[
-                  { name: "TRANG CHỦ", href: "#home", active: true },
-                  { name: "GIẢI PHÁP", href: "#linh-vuc-hoat-dong" },
-                  { name: "SẢN PHẨM", href: "#san-pham" },
-                  { name: "DỊCH VỤ", href: "#services" },
-                  { name: "VỀ CHÚNG TÔI", href: "#about" },
-                  { name: "LIÊN HỆ", href: "#contact" },
-                ].map((item) => {
-                  const isScrollItem = item.href.startsWith("#");
-
-                  return isScrollItem ? (
+                {navItems.map((item) => {
+                  const isActive = activeItem === item.name;
+                  return (
                     <button
                       key={item.name}
                       onClick={() => {
-                        const el = document.querySelector(item.href);
-                        if (el) {
-                          el.scrollIntoView({ behavior: "smooth" });
+                        setActiveItem(item.name);
+                        if (item.onClick) {
+                          item.onClick();
+                        } else if (item.href === "#home") {
+                          window.scrollTo({ top: 0, behavior: "smooth" });
+                        } else if (item.href) {
+                          const el = document.querySelector(item.href);
+                          if (el) el.scrollIntoView({ behavior: "smooth" });
                         }
                       }}
                       className={`px-4 py-2.5 rounded-full font-semibold text-xs uppercase tracking-wide transition-all duration-300 relative overflow-hidden group ${
-                        item.active
+                        isActive
                           ? "bg-white text-amber-600 shadow-lg"
                           : "text-white hover:bg-white/20"
                       }`}
                     >
-                      {!item.active && (
+                      {!isActive && (
                         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"></div>
                       )}
                       <span className="relative z-10">{item.name}</span>
                     </button>
-                  ) : (
-                    <a
-                      key={item.name}
-                      href={item.href}
-                      className={`px-4 py-2.5 rounded-full font-semibold text-xs uppercase tracking-wide transition-all duration-300 relative overflow-hidden group ${
-                        item.active
-                          ? "bg-white text-amber-600 shadow-lg"
-                          : "text-white hover:bg-white/20"
-                      }`}
-                    >
-                      {!item.active && (
-                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"></div>
-                      )}
-                      <span className="relative z-10">{item.name}</span>
-                    </a>
                   );
                 })}
               </div>
@@ -348,7 +350,10 @@ function Header() {
               </div> */}
 
               {/* Enhanced CTA Button with more effects */}
-              <button className="hidden md:flex items-center gap-3 bg-white text-amber-600 px-6 py-3 rounded-2xl font-bold text-sm hover:bg-yellow-50 transition-all duration-300 shadow-lg hover:shadow-2xl hover:scale-105 group relative overflow-hidden">
+              <button
+                onClick={onOpenModal}
+                className="hidden md:flex items-center gap-3 bg-white text-amber-600 px-6 py-3 rounded-2xl font-bold text-sm hover:bg-yellow-50 transition-all duration-300 shadow-lg hover:shadow-2xl hover:scale-105 group relative overflow-hidden"
+              >
                 <div className="absolute inset-0 bg-gradient-to-r from-amber-400/10 via-yellow-400/10 to-orange-400/10 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-500"></div>
                 <div className="w-6 h-6 bg-gradient-to-r from-amber-500 to-orange-500 rounded-lg flex items-center justify-center group-hover:rotate-12 transition-transform duration-300 relative z-10">
                   <svg
@@ -401,25 +406,40 @@ function Header() {
           <div className="bg-gradient-to-b from-amber-600/95 to-orange-600/95 backdrop-blur-md border-t border-white/20">
             <nav className="max-w-7xl mx-auto px-4 sm:px-6">
               <ul className="py-6 space-y-2">
-                {[
-                  { name: "TRANG CHỦ", href: "#home", active: true },
-                  { name: "GIẢI PHÁP", href: "#solutions" },
-                  { name: "SẢN PHẨM", href: "#products" },
-                  { name: "DỊCH VỤ", href: "#services" },
-                  { name: "VỀ CHÚNG TÔI", href: "#about" },
-                  { name: "LIÊN HỆ", href: "#contact" },
-                ].map((item) => (
+                {navItems.map((item) => (
                   <li key={item.name}>
-                    <a
-                      href={item.href}
-                      className={`block px-6 py-4 rounded-2xl font-bold text-sm uppercase tracking-wider transition-all duration-300 ${
-                        item.active
-                          ? "bg-white text-amber-600 shadow-lg"
-                          : "text-white hover:bg-white/20"
-                      }`}
-                    >
-                      {item.name}
-                    </a>
+                    {item.href ? (
+                      <a
+                        href={item.href}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setActiveItem(item.name);
+                          setIsMenuOpen(false);
+
+                          if (item.href === "#home") {
+                            window.scrollTo({ top: 0, behavior: "smooth" });
+                          } else {
+                            const el = document.querySelector(
+                              item.href as string
+                            );
+                            if (el) el.scrollIntoView({ behavior: "smooth" });
+                          }
+                        }}
+                        className="block px-6 py-4 rounded-2xl font-bold text-sm uppercase tracking-wider transition-all duration-300 text-white hover:bg-white/20"
+                      >
+                        {item.name}
+                      </a>
+                    ) : (
+                      <button
+                        onClick={() => {
+                          setActiveItem(item.name);
+                          item.onClick?.();
+                        }}
+                        className="w-full text-left px-6 py-4 rounded-2xl font-bold text-sm uppercase tracking-wider transition-all duration-300 text-white hover:bg-white/20"
+                      >
+                        {item.name}
+                      </button>
+                    )}
                   </li>
                 ))}
               </ul>
@@ -434,7 +454,7 @@ function Header() {
                     <span className="text-xl">🇺🇸</span>
                   </button>
                 </div>
-                <button className="bg-white text-amber-600 px-6 py-4 rounded-2xl font-bold text-sm hover:bg-yellow-50 transition-all duration-300 shadow-lg mx-4 relative z-10">
+                <button onClick={onOpenModal} className="bg-white text-amber-600 px-6 py-4 rounded-2xl font-bold text-sm hover:bg-yellow-50 transition-all duration-300 shadow-lg mx-4 relative z-10">
                   TƯ VẤN MIỄN PHÍ
                 </button>
               </div>

@@ -1,12 +1,34 @@
-import React, { useEffect } from "react";
+import React, { JSX, useEffect, useState } from "react";
 import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
 import OrganizationChart from "../../components/OrganizationChart";
-import Lenis from "lenis";
+import Lenis, { LenisOptions } from "lenis";
 import AOS from "aos";
 import "aos/dist/aos.css";
+import StepModal from "../../components/StepModal";
+import ContactModal from "../../components/ContactModal";
+
+type Step = {
+  step: string;
+  title: string;
+  description: string;
+  color: string;
+  icon: string;
+  detail: JSX.Element;
+};
+
+interface CustomLenisOptions extends LenisOptions {
+  direction?: string;
+  gestureDirection?: string;
+}
 
 function Home() {
+  const [selectedStep, setSelectedStep] = useState<
+    (typeof steps)[number] | null
+  >(null);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   // Initialize Lenis smooth scrolling
   useEffect(() => {
     // Initialize Lenis smooth scrolling
@@ -20,7 +42,7 @@ function Home() {
       smoothTouch: false,
       touchMultiplier: 2,
       infinite: false,
-    });
+    } as CustomLenisOptions);
 
     function raf(time) {
       lenis.raf(time);
@@ -159,9 +181,127 @@ function Home() {
       });
     };
   }, []);
+
+  const steps = [
+    {
+      step: "01",
+      title: "Khảo sát & Lập kế hoạch",
+      description: "Xác định mục tiêu và chiến lược phát triển tối ưu",
+      color: "emerald",
+      icon: "🧭",
+      detail: (
+        <>
+          <p>
+            <strong>🔍 Hiểu đúng nhu cầu:</strong> Tiếp cận khách hàng, lắng
+            nghe và phân tích kỳ vọng để đảm bảo mọi yêu cầu đều được làm rõ
+            ngay từ đầu.
+          </p>
+          <p>
+            <strong>📌 Xác định phạm vi & mục tiêu dự án:</strong> Đưa ra lộ
+            trình cụ thể, tránh phát sinh ngoài dự kiến và tối ưu nguồn lực.
+          </p>
+          <p>
+            <strong>📅 Xây dựng kế hoạch triển khai:</strong> Lên kế hoạch chi
+            tiết về thời gian, nhân sự, chi phí và công nghệ sử dụng.
+          </p>
+          <p>
+            <strong>🤝 Đề xuất phương pháp phù hợp:</strong> Agile, Scrum hay
+            Waterfall – tùy theo tính chất dự án và mô hình hoạt động của doanh
+            nghiệp.
+          </p>
+        </>
+      ),
+    },
+    {
+      step: "02",
+      title: "Phân tích & Thiết kế hệ thống",
+      description: "Kiến tạo nền móng công nghệ vững chắc và trực quan",
+      color: "green",
+      icon: "🎨",
+      detail: (
+        <>
+          <p>
+            <strong>🧠 Phân tích nghiệp vụ chuyên sâu:</strong> Mô hình hóa toàn
+            bộ luồng xử lý, hành vi người dùng và vai trò chức năng.
+          </p>
+          <p>
+            <strong>🧱 Thiết kế kiến trúc kỹ thuật:</strong> Lập sơ đồ cơ sở dữ
+            liệu, API, phân tầng hệ thống và giải pháp bảo mật.
+          </p>
+          <p>
+            <strong>🎯 Xây dựng giao diện trực quan:</strong> Thiết kế UI/UX tối
+            ưu trải nghiệm người dùng, phối hợp với prototype mô phỏng sớm sản
+            phẩm.
+          </p>
+          <p>
+            <strong>🧾 Tài liệu kỹ thuật rõ ràng:</strong> Chuẩn hóa mọi mô hình
+            và thông số kỹ thuật để sẵn sàng bước vào giai đoạn phát triển.
+          </p>
+        </>
+      ),
+    },
+    {
+      step: "03",
+      title: "Phát triển & Kiểm thử",
+      description: "Hiện thực hóa ý tưởng thành sản phẩm công nghệ hoàn chỉnh",
+      color: "teal",
+      icon: "⚙️",
+      detail: (
+        <>
+          <p>
+            <strong>💻 Lập trình theo chuẩn:</strong> Code sạch, logic rõ ràng,
+            dễ mở rộng, tuân thủ quy tắc SOLID và các best practice.
+          </p>
+          <p>
+            <strong>🧪 Kiểm thử toàn diện:</strong> Tự động hóa Unit Test,
+            Integration Test và kiểm thử UI để đảm bảo mọi chức năng đều hoạt
+            động ổn định.
+          </p>
+          <p>
+            <strong>🔄 Chu trình tối ưu liên tục:</strong> Feedback nhanh – cải
+            tiến nhanh, đảm bảo sản phẩm luôn đi đúng kỳ vọng người dùng.
+          </p>
+          <p>
+            <strong>✅ Kiểm soát chất lượng nghiêm ngặt:</strong> Sử dụng quy
+            trình CI/CD, code review đa cấp và checklist QA chuyên biệt.
+          </p>
+        </>
+      ),
+    },
+    {
+      step: "04",
+      title: "Triển khai & Đồng hành",
+      description: "Đưa sản phẩm vào hoạt động và phát triển bền vững",
+      color: "cyan",
+      icon: "🚀",
+      detail: (
+        <>
+          <p>
+            <strong>🚢 Triển khai an toàn:</strong> Đưa hệ thống lên môi trường
+            thực tế với các bước kiểm tra bảo mật, cấu hình tối ưu hiệu suất.
+          </p>
+          <p>
+            <strong>👨‍🏫 Đào tạo & hỗ trợ sử dụng:</strong> Cung cấp tài liệu chi
+            tiết, tổ chức buổi hướng dẫn sử dụng và hỗ trợ nội bộ doanh nghiệp.
+          </p>
+          <p>
+            <strong>🔧 Bảo trì & phản hồi tức thời:</strong> Luôn sẵn sàng hỗ
+            trợ kỹ thuật, cập nhật tính năng và đảm bảo vận hành liên tục.
+          </p>
+          <p>
+            <strong>📈 Đồng hành chiến lược:</strong> Tư vấn cải tiến công nghệ,
+            mở rộng tính năng theo sự phát triển của doanh nghiệp.
+          </p>
+        </>
+      ),
+    },
+  ];
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-amber-50">
-      <Header />
+      <ContactModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+
+      {/* <Header /> */}
 
       {/* Hero Section */}
       <section className="relative py-12 sm:py-16 md:py-20 overflow-hidden">
@@ -174,7 +314,8 @@ function Home() {
           <div className="text-center">
             <div
               className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-100 to-orange-100 rounded-full px-6 py-3 mb-8"
-              data-aos="fade-down">
+              data-aos="fade-down"
+            >
               <div className="w-2 h-2 bg-amber-500 rounded-full animate-pulse"></div>
               <span className="text-amber-700 font-semibold text-sm uppercase tracking-wider">
                 Công ty công nghệ hàng đầu Việt Nam
@@ -184,14 +325,16 @@ function Home() {
             <h1
               className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-black text-gray-900 mb-6 leading-tight"
               data-aos="fade-up"
-              data-aos-delay="200">
+              data-aos-delay="200"
+            >
               Chào mừng đến với
             </h1>
 
             <div
               className="text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-black mb-8 leading-tight"
               data-aos="fade-up"
-              data-aos-delay="400">
+              data-aos-delay="400"
+            >
               <span className="bg-gradient-to-r from-amber-500 via-yellow-500 to-orange-500 bg-clip-text text-transparent">
                 Toàn Cầu
               </span>
@@ -200,8 +343,9 @@ function Home() {
             <p
               className="text-lg sm:text-xl md:text-2xl text-gray-600 mb-12 max-w-4xl mx-auto leading-relaxed px-4"
               data-aos="fade-up"
-              data-aos-delay="600">
-              Công ty cổ phần công nghệ và thương mại toàn cầu - Đồng hành cùng
+              data-aos-delay="600"
+            >
+              Công ty cổ phần công nghệ và thương mại Toàn Cầu - Đồng hành cùng
               doanh nghiệp trong hành trình chuyển đổi số với các giải pháp công
               nghệ tiên tiến và dịch vụ thương mại chuyên nghiệp
             </p>
@@ -209,20 +353,34 @@ function Home() {
             <div
               className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12 sm:mb-16 px-4"
               data-aos="fade-up"
-              data-aos-delay="800">
-              <button className="w-full sm:w-auto bg-gradient-to-r from-amber-500 to-orange-500 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-full font-bold text-base sm:text-lg hover:from-amber-600 hover:to-orange-600 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl">
+              data-aos-delay="800"
+            >
+              {/* <button
+                onClick={() => {
+                  const el = document.querySelector("#linh-vuc-hoat-dong");
+                  if (el) el.scrollIntoView({ behavior: "smooth" });
+                }}
+                className="w-full sm:w-auto bg-gradient-to-r from-amber-500 to-orange-500 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-full font-bold text-base sm:text-lg hover:from-amber-600 hover:to-orange-600 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl"
+              >
                 Khám phá giải pháp
-              </button>
-              <button className="w-full sm:w-auto border-2 border-amber-500 text-amber-600 px-6 sm:px-8 py-3 sm:py-4 rounded-full font-bold text-base sm:text-lg hover:bg-amber-50 transition-all duration-300">
+              </button> */}
+              <button
+                onClick={() => setIsModalOpen(true)}
+                className="w-full sm:w-auto border-2 border-amber-500 text-amber-600 px-6 sm:px-8 py-3 sm:py-4 rounded-full font-bold text-base sm:text-lg hover:bg-amber-50 transition-all duration-300"
+              >
                 Liên hệ tư vấn
               </button>
             </div>
+            
           </div>
         </div>
       </section>
 
       {/* Features Section */}
-      <section id="linh-vuc-hoat-dong" className="py-12 sm:py-16 md:py-20 bg-white">
+      <section
+        id="linh-vuc-hoat-dong"
+        className="py-12 sm:py-16 md:py-20 bg-white"
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12 sm:mb-16" data-aos="fade-up">
             <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 sm:mb-6">
@@ -242,14 +400,16 @@ function Home() {
             <div
               className="group bg-gradient-to-br from-amber-50 to-orange-50 rounded-2xl p-8 hover:shadow-2xl transition-all duration-300 border border-amber-100 hover:border-amber-200"
               data-aos="fade-up"
-              data-aos-delay="100">
+              data-aos-delay="100"
+            >
               <div className="w-16 h-16 bg-gradient-to-br from-amber-500 to-orange-500 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
                 <svg
                   width="28"
                   height="28"
                   viewBox="0 0 24 24"
                   fill="none"
-                  className="text-white">
+                  className="text-white"
+                >
                   <path
                     d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z"
                     stroke="currentColor"
@@ -286,14 +446,16 @@ function Home() {
             <div
               className="group bg-gradient-to-br from-blue-50 to-cyan-50 rounded-2xl p-8 hover:shadow-2xl transition-all duration-300 border border-blue-100 hover:border-blue-200"
               data-aos="fade-up"
-              data-aos-delay="200">
+              data-aos-delay="200"
+            >
               <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
                 <svg
                   width="28"
                   height="28"
                   viewBox="0 0 24 24"
                   fill="none"
-                  className="text-white">
+                  className="text-white"
+                >
                   <path
                     d="M4.6 9L12 2L19.4 9C20.2 9.8 20.2 11.2 19.4 12L12 19.4L4.6 12C3.8 11.2 3.8 9.8 4.6 9Z"
                     fill="currentColor"
@@ -331,14 +493,16 @@ function Home() {
             <div
               className="group bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl p-8 hover:shadow-2xl transition-all duration-300 border border-green-100 hover:border-green-200"
               data-aos="fade-up"
-              data-aos-delay="300">
+              data-aos-delay="300"
+            >
               <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-emerald-500 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
                 <svg
                   width="28"
                   height="28"
                   viewBox="0 0 24 24"
                   fill="none"
-                  className="text-white">
+                  className="text-white"
+                >
                   <path
                     d="M3 3H5L5.4 5M7 13H17L21 5H5.4M7 13L5.4 5M7 13L4.7 15.3C4.3 15.7 4.6 16.5 5.1 16.5H17M17 13V17C17 18.1 16.1 19 15 19H9C7.9 19 7 18.1 7 17V13M15 21C16.1 21 17 20.1 17 19C17 17.9 16.1 17 15 17C13.9 17 13 17.9 13 19C13 20.1 13.9 21 15 21ZM9 21C10.1 21 11 20.1 11 19C11 17.9 10.1 17 9 17C7.9 17 7 17.9 7 19C7 20.1 7.9 21 9 21Z"
                     stroke="currentColor"
@@ -375,14 +539,16 @@ function Home() {
             <div
               className="group bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl p-8 hover:shadow-2xl transition-all duration-300 border border-purple-100 hover:border-purple-200"
               data-aos="fade-up"
-              data-aos-delay="400">
+              data-aos-delay="400"
+            >
               <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
                 <svg
                   width="28"
                   height="28"
                   viewBox="0 0 24 24"
                   fill="none"
-                  className="text-white">
+                  className="text-white"
+                >
                   <path
                     d="M12 2C8.13 2 5 5.13 5 9C5 14.25 12 22 12 22S19 14.25 19 9C19 5.13 15.87 2 12 2ZM12 11.5C10.62 11.5 9.5 10.38 9.5 9S10.62 6.5 12 6.5S14.5 7.62 14.5 9S13.38 11.5 12 11.5Z"
                     fill="currentColor"
@@ -416,14 +582,16 @@ function Home() {
             <div
               className="group bg-gradient-to-br from-indigo-50 to-blue-50 rounded-2xl p-8 hover:shadow-2xl transition-all duration-300 border border-indigo-100 hover:border-indigo-200"
               data-aos="fade-up"
-              data-aos-delay="500">
+              data-aos-delay="500"
+            >
               <div className="w-16 h-16 bg-gradient-to-br from-indigo-500 to-blue-500 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
                 <svg
                   width="28"
                   height="28"
                   viewBox="0 0 24 24"
                   fill="none"
-                  className="text-white">
+                  className="text-white"
+                >
                   <path
                     d="M8 12L10 14L16 8M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z"
                     stroke="currentColor"
@@ -460,14 +628,16 @@ function Home() {
             <div
               className="group bg-gradient-to-br from-orange-50 to-red-50 rounded-2xl p-8 hover:shadow-2xl transition-all duration-300 border border-orange-100 hover:border-orange-200"
               data-aos="fade-up"
-              data-aos-delay="600">
+              data-aos-delay="600"
+            >
               <div className="w-16 h-16 bg-gradient-to-br from-orange-500 to-red-500 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
                 <svg
                   width="28"
                   height="28"
                   viewBox="0 0 24 24"
                   fill="none"
-                  className="text-white">
+                  className="text-white"
+                >
                   <path
                     d="M4 6C4 4.89543 4.89543 4 6 4H18C19.1046 4 20 4.89543 20 6V8C20 9.10457 19.1046 10 18 10H6C4.89543 10 4 9.10457 4 8V6Z"
                     fill="currentColor"
@@ -505,12 +675,16 @@ function Home() {
       </section>
 
       {/* About Section */}
-      <section className="py-24 bg-gradient-to-br from-gray-50 via-white to-amber-50 relative overflow-hidden">
+      <section
+        className="py-24 bg-gradient-to-br from-gray-50 via-white to-amber-50 relative overflow-hidden"
+        id="ve-chung-toi"
+      >
         <div className="absolute top-0 left-0 w-full h-full">
           <div className="absolute top-20 left-20 w-64 h-64 bg-amber-200/10 rounded-full blur-3xl animate-pulse"></div>
           <div
             className="absolute bottom-20 right-20 w-80 h-80 bg-orange-200/10 rounded-full blur-3xl animate-pulse"
-            style={{ animationDelay: "1s" }}></div>
+            style={{ animationDelay: "1s" }}
+          ></div>
         </div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -553,7 +727,8 @@ function Home() {
                         height="14"
                         viewBox="0 0 24 24"
                         fill="none"
-                        className="text-white">
+                        className="text-white"
+                      >
                         <path
                           d="M9 12L11 14L15 10"
                           stroke="currentColor"
@@ -577,9 +752,9 @@ function Home() {
                 </p>
               </div>
 
-              <button className="bg-gradient-to-r from-amber-500 to-orange-500 text-white px-8 py-4 rounded-full font-bold hover:from-amber-600 hover:to-orange-600 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl">
+              {/* <button className="bg-gradient-to-r from-amber-500 to-orange-500 text-white px-8 py-4 rounded-full font-bold hover:from-amber-600 hover:to-orange-600 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl">
                 Tìm hiểu thêm
-              </button>
+              </button> */}
             </div>
 
             <div className="relative" data-aos="fade-left">
@@ -593,7 +768,8 @@ function Home() {
                           height="24"
                           viewBox="0 0 24 24"
                           fill="none"
-                          className="text-white">
+                          className="text-white"
+                        >
                           <path
                             d="M13 2L3 14H12L11 22L21 10H12L13 2Z"
                             fill="currentColor"
@@ -615,7 +791,8 @@ function Home() {
                           height="24"
                           viewBox="0 0 24 24"
                           fill="none"
-                          className="text-white">
+                          className="text-white"
+                        >
                           <path
                             d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z"
                             stroke="currentColor"
@@ -638,7 +815,8 @@ function Home() {
                           height="24"
                           viewBox="0 0 24 24"
                           fill="none"
-                          className="text-white">
+                          className="text-white"
+                        >
                           <path
                             d="M12 2L15.09 8.26L22 9L17 14L18.18 21L12 17.77L5.82 21L7 14L2 9L8.91 8.26L12 2Z"
                             fill="currentColor"
@@ -660,7 +838,8 @@ function Home() {
                           height="24"
                           viewBox="0 0 24 24"
                           fill="none"
-                          className="text-white">
+                          className="text-white"
+                        >
                           <path
                             d="M17 21V19C17 17.9391 16.5786 16.9217 15.8284 16.1716C15.0783 15.4214 14.0609 15 13 15H5C3.93913 15 2.92172 15.4214 2.17157 16.1716C1.42143 16.9217 1 17.9391 1 19V21M23 21V19C22.9993 18.1137 22.7044 17.2528 22.1614 16.5523C21.6184 15.8519 20.8581 15.3516 20 15.13M16 3.13C16.8604 3.35031 17.623 3.85071 18.1676 4.55232C18.7122 5.25392 19.0078 6.11683 19.0078 7.005C19.0078 7.89317 18.7122 8.75608 18.1676 9.45768C17.623 10.1593 16.8604 10.6597 16 10.88"
                             stroke="currentColor"
@@ -688,7 +867,8 @@ function Home() {
         <div className="container mx-auto px-4">
           <div
             className="max-w-4xl mx-auto text-center mb-16"
-            data-aos="fade-up">
+            data-aos="fade-up"
+          >
             <h2 className="text-4xl font-bold text-gray-900 mb-4">
               Sứ mệnh & Tầm nhìn
             </h2>
@@ -706,7 +886,8 @@ function Home() {
                       height="24"
                       viewBox="0 0 24 24"
                       fill="none"
-                      className="text-white">
+                      className="text-white"
+                    >
                       <path
                         d="M12 2L15.09 8.26L22 9L17 14L18.18 21L12 17.77L5.82 21L7 14L2 9L8.91 8.26L12 2Z"
                         fill="currentColor"
@@ -732,7 +913,8 @@ function Home() {
                       height="24"
                       viewBox="0 0 24 24"
                       fill="none"
-                      className="text-white">
+                      className="text-white"
+                    >
                       <path
                         d="M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2ZM21 9V7L15 7.5V9C15 10.1 14.1 11 13 11S11 10.1 11 9V7.5L5 7V9C5 10.1 4.1 11 3 11S1 10.1 1 9V7L7 6.5C7.6 6.4 8.2 6.7 8.5 7.2L12 13L15.5 7.2C15.8 6.7 16.4 6.4 17 6.5L23 7V9C23 10.1 22.1 11 21 11S19 10.1 19 9Z"
                         fill="currentColor"
@@ -811,7 +993,8 @@ function Home() {
           <div className="absolute top-20 left-20 w-72 h-72 bg-amber-400/10 rounded-full blur-3xl animate-pulse"></div>
           <div
             className="absolute bottom-20 right-20 w-96 h-96 bg-orange-400/10 rounded-full blur-3xl animate-pulse"
-            style={{ animationDelay: "2s" }}></div>
+            style={{ animationDelay: "2s" }}
+          ></div>
         </div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -841,7 +1024,8 @@ function Home() {
             {/* Kỹ năng quản lý */}
             <div
               className="group bg-white/5 backdrop-blur-sm rounded-3xl p-8 border border-white/10 hover:border-amber-400/30 transition-all duration-300"
-              data-aos="fade-right">
+              data-aos="fade-right"
+            >
               <div className="flex items-start gap-6">
                 <div className="w-20 h-20 bg-gradient-to-br from-amber-400 to-orange-500 rounded-2xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-300">
                   <svg
@@ -849,7 +1033,8 @@ function Home() {
                     height="32"
                     viewBox="0 0 24 24"
                     fill="none"
-                    className="text-white">
+                    className="text-white"
+                  >
                     <path
                       d="M16 4V2C16 1.45 15.55 1 15 1H9C8.45 1 8 1.45 8 2V4H16ZM11 14H13V8H11V14ZM15.5 4L14.5 3H9.5L8.5 4H5V6H19V4H15.5Z"
                       fill="currentColor"
@@ -874,7 +1059,8 @@ function Home() {
             {/* Kinh nghiệm chuyên môn */}
             <div
               className="group bg-white/5 backdrop-blur-sm rounded-3xl p-8 border border-white/10 hover:border-amber-400/30 transition-all duration-300"
-              data-aos="fade-left">
+              data-aos="fade-left"
+            >
               <div className="flex items-start gap-6">
                 <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-300">
                   <svg
@@ -882,7 +1068,8 @@ function Home() {
                     height="32"
                     viewBox="0 0 24 24"
                     fill="none"
-                    className="text-white">
+                    className="text-white"
+                  >
                     <path
                       d="M12 2L13.09 8.26L22 9L17 14L18.18 21L12 17.77L5.82 21L7 14L2 9L8.91 8.26L12 2Z"
                       fill="currentColor"
@@ -925,14 +1112,16 @@ function Home() {
                 <div
                   className="text-center p-6 bg-white/5 rounded-2xl border border-white/10 hover:border-amber-400/30 transition-all duration-300"
                   data-aos="zoom-in"
-                  data-aos-delay="300">
+                  data-aos-delay="300"
+                >
                   <div className="w-16 h-16 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
                     <svg
                       width="24"
                       height="24"
                       viewBox="0 0 24 24"
                       fill="none"
-                      className="text-white">
+                      className="text-white"
+                    >
                       <path
                         d="M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2ZM21 9V7L15 7.5V9C15 10.1 14.1 11 13 11S11 10.1 11 9V7.5L5 7V9C5 10.1 4.1 11 3 11S1 10.1 1 9V7L7 6.5C7.6 6.4 8.2 6.7 8.5 7.2L12 13L15.5 7.2C15.8 6.7 16.4 6.4 17 6.5L23 7V9C23 10.1 22.1 11 21 11S19 10.1 19 9Z"
                         fill="currentColor"
@@ -948,14 +1137,16 @@ function Home() {
                 <div
                   className="text-center p-6 bg-white/5 rounded-2xl border border-white/10 hover:border-amber-400/30 transition-all duration-300"
                   data-aos="zoom-in"
-                  data-aos-delay="400">
+                  data-aos-delay="400"
+                >
                   <div className="w-16 h-16 bg-gradient-to-br from-green-400 to-blue-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
                     <svg
                       width="24"
                       height="24"
                       viewBox="0 0 24 24"
                       fill="none"
-                      className="text-white">
+                      className="text-white"
+                    >
                       <path
                         d="M19 3H5C3.9 3 3 3.9 3 5V19C3 20.1 3.9 21 5 21H19C20.1 21 21 20.1 21 19V5C21 3.9 20.1 3 19 3ZM9 17H7V10H9V17ZM13 17H11V7H13V17ZM17 17H15V14H17V17Z"
                         fill="currentColor"
@@ -972,14 +1163,16 @@ function Home() {
                 <div
                   className="text-center p-6 bg-white/5 rounded-2xl border border-white/10 hover:border-amber-400/30 transition-all duration-300"
                   data-aos="zoom-in"
-                  data-aos-delay="500">
+                  data-aos-delay="500"
+                >
                   <div className="w-16 h-16 bg-gradient-to-br from-purple-400 to-pink-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
                     <svg
                       width="24"
                       height="24"
                       viewBox="0 0 24 24"
                       fill="none"
-                      className="text-white">
+                      className="text-white"
+                    >
                       <path
                         d="M12 2L15.09 8.26L22 9L17 14L18.18 21L12 17.77L5.82 21L7 14L2 9L8.91 8.26L12 2Z"
                         fill="currentColor"
@@ -999,13 +1192,15 @@ function Home() {
           <div
             className="bg-white/5 backdrop-blur-sm rounded-3xl p-8 border border-white/10"
             data-aos="fade-up"
-            data-aos-delay="300">
+            data-aos-delay="300"
+          >
             <div className="flex flex-col lg:flex-row items-center gap-8">
               <div className="lg:w-1/3">
                 <div
                   className="w-48 h-32 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center mx-auto shadow-2xl"
                   data-aos="flip-left"
-                  data-aos-delay="400">
+                  data-aos-delay="400"
+                >
                   <div className="text-center text-white">
                     <div className="text-3xl font-black mb-2">TOTAL</div>
                     <div className="text-lg font-semibold">TRAINING</div>
@@ -1015,7 +1210,8 @@ function Home() {
                         height="40"
                         viewBox="0 0 24 24"
                         fill="none"
-                        className="mx-auto">
+                        className="mx-auto"
+                      >
                         <path
                           d="M12 2L15.09 8.26L22 9L17 14L18.18 21L12 17.77L5.82 21L7 14L2 9L8.91 8.26L12 2Z"
                           fill="currentColor"
@@ -1049,7 +1245,8 @@ function Home() {
             <div
               className="text-center text-white"
               data-aos="fade-up"
-              data-aos-delay="100">
+              data-aos-delay="100"
+            >
               <div className="text-5xl font-black mb-2">500+</div>
               <div className="text-lg font-medium opacity-90">
                 Dự án hoàn thành
@@ -1058,7 +1255,8 @@ function Home() {
             <div
               className="text-center text-white"
               data-aos="fade-up"
-              data-aos-delay="200">
+              data-aos-delay="200"
+            >
               <div className="text-5xl font-black mb-2">200+</div>
               <div className="text-lg font-medium opacity-90">
                 Khách hàng tin tưởng
@@ -1067,7 +1265,8 @@ function Home() {
             <div
               className="text-center text-white"
               data-aos="fade-up"
-              data-aos-delay="300">
+              data-aos-delay="300"
+            >
               <div className="text-5xl font-black mb-2">8+</div>
               <div className="text-lg font-medium opacity-90">
                 Năm kinh nghiệm
@@ -1076,7 +1275,8 @@ function Home() {
             <div
               className="text-center text-white"
               data-aos="fade-up"
-              data-aos-delay="400">
+              data-aos-delay="400"
+            >
               <div className="text-5xl font-black mb-2">24/7</div>
               <div className="text-lg font-medium opacity-90">
                 Hỗ trợ khách hàng
@@ -1087,14 +1287,17 @@ function Home() {
       </section>
 
       {/* Products Section */}
-      <section className="py-24 bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900 relative overflow-hidden" id="san-pham">
+      <section
+        className="py-24 bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900 relative overflow-hidden"
+        id="san-pham"
+      >
         <div className="absolute inset-0 bg-black/20"></div>
         <div className="absolute inset-0">
           <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl"></div>
           <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl"></div>
         </div>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10" >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center mb-16" data-aos="fade-up">
             <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-full px-6 py-3 mb-8">
               <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></div>
@@ -1120,9 +1323,129 @@ function Home() {
             <div className="overflow-hidden rounded-3xl">
               <div
                 className="flex transition-transform duration-500 ease-in-out"
-                id="productSlider2">
+                id="productSlider2"
+              >
+                <div className="w-full flex-shrink-0 h-auto lg:h-[700px]">
+                  <div className="bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm rounded-3xl p-6 h-full">
+                    {/* bệnh án điện tử */}
+                    <div className="grid lg:grid-cols-2 gap-8 h-full">
+                      {/* Nội dung bên trái */}
+                      <div>
+                        <div className="inline-block bg-gradient-to-r from-emerald-500 to-green-500 text-white px-4 py-2 rounded-full text-sm font-semibold mb-6">
+                          Bệnh án điện tử
+                        </div>
+                        <h3 className="text-3xl font-bold text-white mb-6">
+                          Phần mềm Bệnh án điện tử EMR (Electronic Medical
+                          Record)
+                        </h3>
+
+                        <div className="space-y-4 mb-6">
+                          <div className="bg-emerald-500/10 rounded-xl p-4">
+                            <h4 className="text-lg font-bold text-emerald-400 mb-2">
+                              🏥 Quản lý hồ sơ bệnh nhân
+                            </h4>
+                            <p className="text-gray-300 text-sm">
+                              Lưu trữ toàn bộ lịch sử khám, chẩn đoán và điều
+                              trị của bệnh nhân theo chuẩn Bộ Y Tế.
+                            </p>
+                          </div>
+
+                          <div className="bg-emerald-500/10 rounded-xl p-4">
+                            <h4 className="text-lg font-bold text-emerald-400 mb-2">
+                              🔒 Bảo mật & phân quyền
+                            </h4>
+                            <p className="text-gray-300 text-sm">
+                              Hệ thống phân quyền truy cập nghiêm ngặt theo vai
+                              trò bác sĩ, y tá, quản trị viên,...
+                            </p>
+                          </div>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-3 text-sm">
+                          <div className="bg-white/5 rounded-lg p-3">
+                            <div className="text-emerald-400 font-semibold mb-1">
+                              📁 Bệnh án số hóa
+                            </div>
+                            <div className="text-gray-400">
+                              Chẩn đoán, đơn thuốc, xét nghiệm, hình ảnh
+                            </div>
+                          </div>
+                          <div className="bg-white/5 rounded-lg p-3">
+                            <div className="text-emerald-400 font-semibold mb-1">
+                              📆 Lịch sử khám chữa
+                            </div>
+                            <div className="text-gray-400">
+                              Theo dõi khám bệnh, điều trị nội trú, ngoại trú
+                            </div>
+                          </div>
+                          <div className="bg-white/5 rounded-lg p-3">
+                            <div className="text-emerald-400 font-semibold mb-1">
+                              ⚙️ Tích hợp thiết bị y tế
+                            </div>
+                            <div className="text-gray-400">
+                              Kết nối máy đo, xét nghiệm, thiết bị y khoa
+                            </div>
+                          </div>
+                          <div className="bg-white/5 rounded-lg p-3">
+                            <div className="text-emerald-400 font-semibold mb-1">
+                              📊 Báo cáo & thống kê
+                            </div>
+                            <div className="text-gray-400">
+                              Xuất báo cáo nhanh theo chuẩn cơ quan y tế
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Hộp mô tả bên phải */}
+                      <div className="flex items-center justify-center">
+                        <div className="bg-white/10 rounded-2xl p-8 backdrop-blur-sm max-w-md">
+                          <div className="text-center mb-6">
+                            <div className="w-24 h-24 bg-gradient-to-r from-emerald-500 to-green-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                              <span className="text-3xl">🩺</span>
+                            </div>
+                            <h4 className="text-xl font-bold text-white">
+                              eHealth Records
+                            </h4>
+                            <p className="text-gray-300">
+                              Hệ thống bệnh án điện tử toàn diện
+                            </p>
+                          </div>
+
+                          <div className="space-y-3">
+                            <div className="flex items-center gap-3 text-sm">
+                              <div className="w-2 h-2 bg-emerald-400 rounded-full"></div>
+                              <span className="text-gray-300">
+                                Số hóa toàn bộ hồ sơ bệnh nhân
+                              </span>
+                            </div>
+                            <div className="flex items-center gap-3 text-sm">
+                              <div className="w-2 h-2 bg-emerald-400 rounded-full"></div>
+                              <span className="text-gray-300">
+                                Quản lý dữ liệu y tế an toàn & bảo mật
+                              </span>
+                            </div>
+                            <div className="flex items-center gap-3 text-sm">
+                              <div className="w-2 h-2 bg-emerald-400 rounded-full"></div>
+                              <span className="text-gray-300">
+                                Hỗ trợ chuẩn hóa theo thông tư Bộ Y Tế
+                              </span>
+                            </div>
+                            <div className="flex items-center gap-3 text-sm">
+                              <div className="w-2 h-2 bg-emerald-400 rounded-full"></div>
+                              <span className="text-gray-300">
+                                Dễ dàng truy xuất & chia sẻ thông tin
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
                 {/* Slide 1: gHRM */}
-                <div className="w-full flex-shrink-0 h-[700px]">
+                <div className="w-full flex-shrink-0 h-auto lg:h-[700px]">
                   <div className="bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm rounded-3xl p-6 h-full">
                     <div className="grid lg:grid-cols-2 gap-8 h-full">
                       <div>
@@ -1238,7 +1561,7 @@ function Home() {
                 </div>
 
                 {/* Slide 2: gGIS */}
-                <div className="w-full flex-shrink-0 h-[700px]">
+                <div className="w-full flex-shrink-0 h-auto lg:h-[700px]">
                   <div className="bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm rounded-3xl p-6 h-full">
                     <div className="grid lg:grid-cols-2 gap-8 h-full">
                       <div>
@@ -1352,7 +1675,7 @@ function Home() {
                 </div>
 
                 {/* Slide 3: gPM */}
-                <div className="w-full flex-shrink-0 h-[700px]">
+                <div className="w-full flex-shrink-0 h-auto lg:h-[700px]">
                   <div className="bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm rounded-3xl p-6 h-full">
                     <div className="grid lg:grid-cols-2 gap-8 h-full">
                       <div>
@@ -1447,7 +1770,7 @@ function Home() {
                             <div className="flex items-center gap-3 text-sm">
                               <div className="w-2 h-2 bg-purple-400 rounded-full"></div>
                               <span className="text-gray-300">
-                                Công nghệ hiện đại
+                                Công nghệ hiện đại iii
                               </span>
                             </div>
                             <div className="flex items-center gap-3 text-sm">
@@ -1464,7 +1787,7 @@ function Home() {
                 </div>
 
                 {/* Slide 4: gES - Cân điện tử */}
-                <div className="w-full flex-shrink-0 h-[700px]">
+                <div className="w-full flex-shrink-0 h-auto lg:h-[700px]">
                   <div className="bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm rounded-3xl p-6 h-full">
                     <div className="grid lg:grid-cols-2 gap-8 h-full">
                       <div>
@@ -1483,7 +1806,8 @@ function Home() {
                                 height="20"
                                 viewBox="0 0 24 24"
                                 fill="currentColor"
-                                className="text-indigo-400">
+                                className="text-indigo-400"
+                              >
                                 <path d="M12 3C12.5523 3 13 3.44772 13 4V7H18C18.5523 7 19 7.44772 19 8V9C19 9.55228 18.5523 10 18 10H13V16H16C16.5523 16 17 16.4477 17 17C17 17.5523 16.5523 18 16 18H8C7.44772 18 7 17.5523 7 17C7 16.4477 7.44772 16 8 16H11V10H6C5.44772 10 5 9.55228 5 9V8C5 7.44772 5.44772 7 6 7H11V4C11 3.44772 11.4477 3 12 3Z" />
                               </svg>
                               Tương thích rộng
@@ -1501,7 +1825,8 @@ function Home() {
                                 height="20"
                                 viewBox="0 0 24 24"
                                 fill="currentColor"
-                                className="text-indigo-400">
+                                className="text-indigo-400"
+                              >
                                 <path d="M3 13H11V3H13V13H21V15H13V21H11V15H3V13Z" />
                               </svg>
                               Đa ứng dụng
@@ -1521,7 +1846,8 @@ function Home() {
                                 height="16"
                                 viewBox="0 0 24 24"
                                 fill="currentColor"
-                                className="text-indigo-400">
+                                className="text-indigo-400"
+                              >
                                 <path d="M4 6H20V8H4V6ZM4 11H20V13H4V11ZM4 16H20V18H4V16Z" />
                               </svg>
                               Cơ sở dữ liệu
@@ -1537,7 +1863,8 @@ function Home() {
                                 height="16"
                                 viewBox="0 0 24 24"
                                 fill="currentColor"
-                                className="text-indigo-400">
+                                className="text-indigo-400"
+                              >
                                 <path d="M6 10C6 5.58172 9.58172 2 14 2C18.4183 2 22 5.58172 22 10V11H20V10C20 6.68629 17.3137 4 14 4C10.6863 4 8 6.68629 8 10V11H10V13H6V11H4V10H6ZM10 13V22H4V13H10ZM8 15H6V20H8V15Z" />
                               </svg>
                               Bảo mật
@@ -1553,7 +1880,8 @@ function Home() {
                                 height="16"
                                 viewBox="0 0 24 24"
                                 fill="currentColor"
-                                className="text-indigo-400">
+                                className="text-indigo-400"
+                              >
                                 <path d="M5 3V19H21V21H3V3H5ZM19.9393 5.93934L21.3536 7.35355L15.7071 13L13.2929 10.5858L9.20711 14.6716L7.79289 13.2574L13.2929 7.75736L15.7071 10.1716L19.9393 5.93934Z" />
                               </svg>
                               Báo cáo
@@ -1569,7 +1897,8 @@ function Home() {
                                 height="16"
                                 viewBox="0 0 24 24"
                                 fill="currentColor"
-                                className="text-indigo-400">
+                                className="text-indigo-400"
+                              >
                                 <path d="M12 2C13.1046 2 14 2.89543 14 4V6.26756C16.9463 7.05039 19.9496 9.05039 20.7324 12H22C22.5523 12 23 12.4477 23 13C23 13.5523 22.5523 14 22 14H20.7324C19.9496 16.9496 16.9463 18.9496 14 19.7324V22C14 22.5523 13.5523 23 13 23C12.4477 23 12 22.5523 12 22V19.7324C9.05039 18.9496 6.05039 16.9463 5.26756 14H4C3.44772 14 3 13.5523 3 13C3 12.4477 3.44772 12 4 12H5.26756C6.05039 9.05039 9.05039 7.05039 12 6.26756V4C12 2.89543 12.8954 2 12 2ZM12 8C9.79086 8 8 9.79086 8 12C8 14.2091 9.79086 16 12 16C14.2091 16 16 14.2091 16 12C16 9.79086 14.2091 8 12 8Z" />
                               </svg>
                               Tự động
@@ -1590,7 +1919,8 @@ function Home() {
                                 height="32"
                                 viewBox="0 0 24 24"
                                 fill="currentColor"
-                                className="text-white">
+                                className="text-white"
+                              >
                                 <path d="M12 3C12.5523 3 13 3.44772 13 4V7H18C18.5523 7 19 7.44772 19 8V9C19 9.55228 18.5523 10 18 10H13V16H16C16.5523 16 17 16.4477 17 17C17 17.5523 16.5523 18 16 18H8C7.44772 18 7 17.5523 7 17C7 16.4477 7.44772 16 8 16H11V10H6C5.44772 10 5 9.55228 5 9V8C5 7.44772 5.44772 7 6 7H11V4C11 3.44772 11.4477 3 12 3Z" />
                               </svg>
                             </div>
@@ -1640,13 +1970,15 @@ function Home() {
             <div className="flex justify-center items-center gap-4 mt-8">
               <button
                 id="prevSlide2"
-                className="bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 rounded-full p-3 transition-all duration-300 group">
+                className="bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 rounded-full p-3 transition-all duration-300 group"
+              >
                 <svg
                   width="20"
                   height="20"
                   viewBox="0 0 24 24"
                   fill="none"
-                  className="text-white group-hover:text-blue-300">
+                  className="text-white group-hover:text-blue-300"
+                >
                   <path
                     d="M15 18L9 12L15 6"
                     stroke="currentColor"
@@ -1666,13 +1998,15 @@ function Home() {
 
               <button
                 id="nextSlide2"
-                className="bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 rounded-full p-3 transition-all duration-300 group">
+                className="bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 rounded-full p-3 transition-all duration-300 group"
+              >
                 <svg
                   width="20"
                   height="20"
                   viewBox="0 0 24 24"
                   fill="none"
-                  className="text-white group-hover:text-blue-300">
+                  className="text-white group-hover:text-blue-300"
+                >
                   <path
                     d="M9 18L15 12L9 6"
                     stroke="currentColor"
@@ -1688,444 +2022,6 @@ function Home() {
       </section>
 
       {/* Technology Stack Section */}
-      <section className="py-24 bg-white relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 via-transparent to-purple-50/50"></div>
-
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="text-center mb-16" data-aos="fade-up">
-            <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-100 to-purple-100 rounded-full px-6 py-3 mb-8">
-              <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
-              <span className="text-blue-700 font-semibold text-sm">
-                CÔNG NGHỆ
-              </span>
-            </div>
-
-            <h2 className="text-4xl md:text-5xl font-black text-gray-900 mb-6">
-              Công nghệ{" "}
-              <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                hiện đại
-              </span>
-            </h2>
-
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Chúng tôi sử dụng những công nghệ mới nhất và tiên tiến nhất để
-              đảm bảo sản phẩm luôn đáp ứng tiêu chuẩn cao nhất
-            </p>
-          </div>
-
-          {/* Technology Categories */}
-          <div className="space-y-16">
-            {/* Hệ điều hành */}
-            <div data-aos="fade-up" data-aos-delay="100">
-              <div className="text-center mb-12">
-                <h3 className="text-3xl font-bold mb-4">
-                  <span className="text-blue-600">Hệ điều hành</span>
-                </h3>
-                <div className="w-20 h-1 bg-blue-600 mx-auto rounded-full"></div>
-              </div>
-
-              <div className="flex justify-center">
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-2xl">
-                  {[
-                    {
-                      name: "Windows",
-                      icon: (
-                        <img
-                          src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/windows8/windows8-original.svg"
-                          alt="Windows"
-                          className="w-8 h-8"
-                        />
-                      ),
-                      bgColor: "bg-gradient-to-br from-blue-500 to-blue-600",
-                    },
-                    {
-                      name: "Linux",
-                      icon: (
-                        <img
-                          src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linux/linux-original.svg"
-                          alt="Linux"
-                          className="w-8 h-8"
-                        />
-                      ),
-                      bgColor:
-                        "bg-gradient-to-br from-yellow-400 to-orange-500",
-                    },
-                    {
-                      name: "Mac OS",
-                      icon: (
-                        <img
-                          src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/apple/apple-original.svg"
-                          alt="Mac OS"
-                          className="w-8 h-8"
-                        />
-                      ),
-                      bgColor: "bg-gradient-to-br from-gray-700 to-black",
-                    },
-                    {
-                      name: "CentOS",
-                      icon: (
-                        <img
-                          src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/centos/centos-original.svg"
-                          alt="CentOS"
-                          className="w-8 h-8"
-                        />
-                      ),
-                      bgColor:
-                        "bg-gradient-to-br from-purple-500 to-purple-600",
-                    },
-                  ].map((tech, index) => (
-                    <div key={index} className="group text-center">
-                      <div
-                        className={`w-24 h-24 ${tech.bgColor} rounded-3xl flex items-center justify-center mx-auto mb-4 shadow-lg group-hover:shadow-2xl group-hover:scale-105 transition-all duration-300 border-2 border-white`}>
-                        {tech.icon}
-                      </div>
-                      <div className="font-bold text-gray-900 text-lg group-hover:text-blue-600 transition-colors duration-300">
-                        {tech.name}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            {/* Hệ quản trị cơ sở dữ liệu */}
-            <div data-aos="fade-up" data-aos-delay="200">
-              <div className="text-center mb-12">
-                <h3 className="text-3xl font-bold mb-4">
-                  <span className="text-green-600">
-                    Hệ quản trị cơ sở dữ liệu
-                  </span>
-                </h3>
-                <div className="w-20 h-1 bg-green-600 mx-auto rounded-full"></div>
-              </div>
-
-              <div className="flex justify-center">
-                <div className="grid grid-cols-3 md:grid-cols-6 gap-8 max-w-4xl">
-                  {[
-                    {
-                      name: "Oracle",
-                      icon: (
-                        <img
-                          src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/oracle/oracle-original.svg"
-                          alt="Oracle"
-                          className="w-8 h-8"
-                        />
-                      ),
-                      bgColor: "bg-gradient-to-br from-red-500 to-red-600",
-                    },
-                    {
-                      name: "SQL Server",
-                      icon: (
-                        <img
-                          src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/microsoftsqlserver/microsoftsqlserver-plain.svg"
-                          alt="SQL Server"
-                          className="w-8 h-8"
-                        />
-                      ),
-                      bgColor: "bg-gradient-to-br from-blue-500 to-blue-600",
-                    },
-                    {
-                      name: "MySQL",
-                      icon: (
-                        <img
-                          src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg"
-                          alt="MySQL"
-                          className="w-8 h-8"
-                        />
-                      ),
-                      bgColor: "bg-gradient-to-br from-blue-500 to-teal-500",
-                    },
-                    {
-                      name: "PostgreSQL",
-                      icon: (
-                        <img
-                          src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg"
-                          alt="PostgreSQL"
-                          className="w-8 h-8"
-                        />
-                      ),
-                      bgColor: "bg-gradient-to-br from-blue-600 to-blue-700",
-                    },
-                    {
-                      name: "SQLite",
-                      icon: (
-                        <img
-                          src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/sqlite/sqlite-original.svg"
-                          alt="SQLite"
-                          className="w-8 h-8"
-                        />
-                      ),
-                      bgColor: "bg-gradient-to-br from-gray-500 to-gray-600",
-                    },
-                    {
-                      name: "MS Access",
-                      icon: (
-                        <img
-                          src="https://img.icons8.com/color/48/microsoft-access-2019.png"
-                          alt="MS Access"
-                          className="w-8 h-8"
-                        />
-                      ),
-                      bgColor: "bg-gradient-to-br from-green-500 to-green-600",
-                    },
-                  ].map((tech, index) => (
-                    <div key={index} className="group text-center">
-                      <div
-                        className={`w-24 h-24 ${tech.bgColor} rounded-3xl flex items-center justify-center mx-auto mb-4 shadow-lg group-hover:shadow-2xl group-hover:scale-105 transition-all duration-300 border-2 border-white`}>
-                        {tech.icon}
-                      </div>
-                      <div className="font-bold text-gray-900 text-lg group-hover:text-green-600 transition-colors duration-300">
-                        {tech.name}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            {/* Phần mềm máy chủ */}
-            <div data-aos="fade-up" data-aos-delay="300">
-              <div className="text-center mb-12">
-                <h3 className="text-3xl font-bold mb-4">
-                  <span className="text-purple-600">Phần mềm máy chủ</span>
-                </h3>
-                <div className="w-20 h-1 bg-purple-600 mx-auto rounded-full"></div>
-              </div>
-
-              <div className="flex justify-center">
-                <div className="grid grid-cols-3 md:grid-cols-6 gap-8 max-w-4xl">
-                  {[
-                    {
-                      name: "Apache",
-                      icon: (
-                        <img
-                          src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/apache/apache-original.svg"
-                          alt="Apache"
-                          className="w-8 h-8"
-                        />
-                      ),
-                      bgColor: "bg-gradient-to-br from-red-500 to-red-600",
-                    },
-                    {
-                      name: "IIS",
-                      icon: (
-                        <img
-                          src="https://img.icons8.com/color/48/microsoft.png"
-                          alt="IIS"
-                          className="w-8 h-8"
-                        />
-                      ),
-                      bgColor: "bg-gradient-to-br from-blue-500 to-blue-600",
-                    },
-                    {
-                      name: "Tomcat",
-                      icon: (
-                        <img
-                          src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tomcat/tomcat-original.svg"
-                          alt="Tomcat"
-                          className="w-8 h-8"
-                        />
-                      ),
-                      bgColor:
-                        "bg-gradient-to-br from-orange-500 to-orange-600",
-                    },
-                    {
-                      name: "Java Server",
-                      icon: (
-                        <img
-                          src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg"
-                          alt="Java Server"
-                          className="w-8 h-8"
-                        />
-                      ),
-                      bgColor: "bg-gradient-to-br from-orange-500 to-red-500",
-                    },
-                    {
-                      name: ".NET",
-                      icon: (
-                        <img
-                          src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/dot-net/dot-net-original.svg"
-                          alt=".NET"
-                          className="w-8 h-8"
-                        />
-                      ),
-                      bgColor:
-                        "bg-gradient-to-br from-purple-600 to-purple-700",
-                    },
-                    {
-                      name: "Oracle Portal",
-                      icon: (
-                        <img
-                          src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/oracle/oracle-original.svg"
-                          alt="Oracle Portal"
-                          className="w-8 h-8"
-                        />
-                      ),
-                      bgColor: "bg-gradient-to-br from-red-600 to-red-700",
-                    },
-                  ].map((tech, index) => (
-                    <div key={index} className="group text-center">
-                      <div
-                        className={`w-24 h-24 ${tech.bgColor} rounded-3xl flex items-center justify-center mx-auto mb-4 shadow-lg group-hover:shadow-2xl group-hover:scale-105 transition-all duration-300 border-2 border-white`}>
-                        {tech.icon}
-                      </div>
-                      <div className="font-bold text-gray-900 text-lg group-hover:text-purple-600 transition-colors duration-300">
-                        {tech.name}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            {/* Ngôn ngữ lập trình & Chứng chỉ mạng */}
-            <div className="grid lg:grid-cols-2 gap-8">
-              {/* Ngôn ngữ lập trình */}
-              <div data-aos="fade-right" data-aos-delay="400">
-                <div className="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-3xl p-8 shadow-lg border border-indigo-100 h-full">
-                  <h3 className="text-2xl font-bold text-center mb-8">
-                    <span className="text-indigo-600">
-                      Ngôn ngữ lập trình - Nền tảng - Môi trường phát triển
-                    </span>
-                  </h3>
-                  <div className="space-y-6">
-                    <div className="flex flex-wrap gap-3 justify-center">
-                      {[
-                        { name: "VBScript/JavaScript", color: "#f1c40f" },
-                        { name: "T-SQL/PL/SQL", color: "#3498db" },
-                        { name: "Share Point", color: "#2c3e50" },
-                        { name: "Magento", color: "#f39c12" },
-                      ].map((tech, index) => (
-                        <div
-                          key={index}
-                          className="flex items-center bg-white rounded-xl px-4 py-3 shadow-sm border border-gray-100">
-                          <div
-                            className="w-3 h-3 rounded-full mr-3"
-                            style={{ backgroundColor: tech.color }}></div>
-                          <span className="text-sm font-semibold text-gray-700">
-                            {tech.name}
-                          </span>
-                        </div>
-                      ))}
-                    </div>
-                    <div className="flex flex-wrap gap-3 justify-center">
-                      {[
-                        {
-                          name: "Microsoft Visual Studio/VC++",
-                          color: "#9b59b6",
-                        },
-                        { name: ".NET/VB/C#/C++", color: "#8e44ad" },
-                        { name: "Java/JSP/Servlet/Eclipse", color: "#e67e22" },
-                      ].map((tech, index) => (
-                        <div
-                          key={index}
-                          className="flex items-center bg-white rounded-xl px-4 py-3 shadow-sm border border-gray-100">
-                          <div
-                            className="w-3 h-3 rounded-full mr-3"
-                            style={{ backgroundColor: tech.color }}></div>
-                          <span className="text-sm font-semibold text-gray-700">
-                            {tech.name}
-                          </span>
-                        </div>
-                      ))}
-                    </div>
-                    <div className="flex flex-wrap gap-3 justify-center">
-                      {[
-                        { name: "ZendStudio/PHP", color: "#27ae60" },
-                        { name: "Objective-C", color: "#34495e" },
-                        {
-                          name: "Framework web: Node.js, Angular7, .Net",
-                          color: "#e74c3c",
-                        },
-                      ].map((tech, index) => (
-                        <div
-                          key={index}
-                          className="flex items-center bg-white rounded-xl px-4 py-3 shadow-sm border border-gray-100">
-                          <div
-                            className="w-3 h-3 rounded-full mr-3"
-                            style={{ backgroundColor: tech.color }}></div>
-                          <span className="text-sm font-semibold text-gray-700">
-                            {tech.name}
-                          </span>
-                        </div>
-                      ))}
-                    </div>
-                    <div className="text-center">
-                      <div className="flex items-center bg-white rounded-xl px-4 py-3 shadow-sm border border-gray-100 inline-flex">
-                        <div className="w-3 h-3 rounded-full mr-3 bg-blue-600"></div>
-                        <span className="text-sm font-semibold text-gray-700">
-                          Openlayers, MapXtreme iPhone/Android SDK
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Chứng chỉ mạng */}
-              <div data-aos="fade-left" data-aos-delay="500">
-                <div className="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-3xl p-8 shadow-lg border border-blue-100 h-full">
-                  <h3 className="text-2xl font-bold text-center mb-8">
-                    <span className="text-blue-600">
-                      Máy tính - Mạng máy tính - Mạng truyền thông
-                    </span>
-                  </h3>
-                  <div className="space-y-4">
-                    {[
-                      {
-                        name: "CCNA",
-                        desc: "Cisco Certified Network Associate - CISCO",
-                      },
-                      {
-                        name: "CCDA",
-                        desc: "Cisco Certified Design Associate - CISCO",
-                      },
-                      {
-                        name: "CCNP",
-                        desc: "Cisco Certified Network Professional - CISCO",
-                      },
-                      {
-                        name: "CCDP",
-                        desc: "Cisco Certified Design Professional - CISCO",
-                      },
-                      {
-                        name: "CCSP",
-                        desc: "Cisco Certified Security Professional - CISCO",
-                      },
-                      {
-                        name: "CCVP",
-                        desc: "Cisco Certified Voice Professional - CISCO",
-                      },
-                      {
-                        name: "CCIP",
-                        desc: "Cisco Certified Internet Professional",
-                      },
-                    ].map((cert, index) => (
-                      <div
-                        key={index}
-                        className="flex items-start bg-white rounded-xl p-4 shadow-sm border border-gray-100">
-                        <div className="w-16 h-10 bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg flex items-center justify-center mr-4 flex-shrink-0">
-                          <span className="text-white text-xs font-bold">
-                            {cert.name}
-                          </span>
-                        </div>
-                        <div>
-                          <div className="font-bold text-gray-900 text-base">
-                            {cert.name}
-                          </div>
-                          <div className="text-sm text-gray-600 leading-relaxed">
-                            {cert.desc}
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* Portfolio Section */}
       <section className="py-24 bg-gradient-to-br from-gray-900 via-slate-800 to-gray-900 relative overflow-hidden">
@@ -2134,7 +2030,8 @@ function Home() {
           <div className="absolute top-20 left-20 w-72 h-72 bg-amber-400/10 rounded-full blur-3xl animate-pulse"></div>
           <div
             className="absolute bottom-20 right-20 w-96 h-96 bg-orange-400/10 rounded-full blur-3xl animate-pulse"
-            style={{ animationDelay: "2s" }}></div>
+            style={{ animationDelay: "2s" }}
+          ></div>
         </div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -2212,15 +2109,18 @@ function Home() {
             ].map((project, index) => (
               <div
                 key={index}
-                className="group bg-white/5 backdrop-blur-sm rounded-3xl p-8 border border-white/10 hover:border-amber-400/30 transition-all duration-500 hover:transform hover:scale-105">
+                className="group bg-white/5 backdrop-blur-sm rounded-3xl p-8 border border-white/10 hover:border-amber-400/30 transition-all duration-500 hover:transform hover:scale-105"
+              >
                 <div
-                  className={`w-16 h-16 bg-gradient-to-br ${project.gradient} rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}>
+                  className={`w-16 h-16 bg-gradient-to-br ${project.gradient} rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}
+                >
                   <svg
                     width="28"
                     height="28"
                     viewBox="0 0 24 24"
                     fill="none"
-                    className="text-white">
+                    className="text-white"
+                  >
                     <path
                       d="M13 2L3 14H12L11 22L21 10H12L13 2Z"
                       fill="currentColor"
@@ -2242,20 +2142,22 @@ function Home() {
                   {project.tech.map((tech, techIndex) => (
                     <span
                       key={techIndex}
-                      className="px-3 py-1 bg-white/10 text-white text-xs font-medium rounded-full border border-white/20">
+                      className="px-3 py-1 bg-white/10 text-white text-xs font-medium rounded-full border border-white/20"
+                    >
                       {tech}
                     </span>
                   ))}
                 </div>
 
-                <button className="text-amber-400 font-semibold hover:text-amber-300 transition-colors duration-300 flex items-center gap-2 group/btn">
+                {/* <button className="text-amber-400 font-semibold hover:text-amber-300 transition-colors duration-300 flex items-center gap-2 group/btn">
                   Xem chi tiết
                   <svg
                     width="16"
                     height="16"
                     viewBox="0 0 24 24"
                     fill="none"
-                    className="group-hover/btn:translate-x-1 transition-transform duration-300">
+                    className="group-hover/btn:translate-x-1 transition-transform duration-300"
+                  >
                     <path
                       d="M5 12H19M19 12L12 5M19 12L12 19"
                       stroke="currentColor"
@@ -2264,7 +2166,7 @@ function Home() {
                       strokeLinejoin="round"
                     />
                   </svg>
-                </button>
+                </button> */}
               </div>
             ))}
           </div>
@@ -2272,12 +2174,16 @@ function Home() {
       </section>
 
       {/* Quality Management System Section */}
-      <section className="py-24 bg-gradient-to-br from-emerald-50 via-green-50 to-teal-50 relative overflow-hidden">
+      <section
+        className="py-24 bg-gradient-to-br from-emerald-50 via-green-50 to-teal-50 relative overflow-hidden"
+        id="he-thong"
+      >
         <div className="absolute top-0 left-0 w-full h-full">
           <div className="absolute top-20 right-20 w-64 h-64 bg-emerald-200/20 rounded-full blur-3xl animate-pulse"></div>
           <div
             className="absolute bottom-20 left-20 w-80 h-80 bg-green-200/20 rounded-full blur-3xl animate-pulse"
-            style={{ animationDelay: "1.5s" }}></div>
+            style={{ animationDelay: "1.5s" }}
+          ></div>
         </div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -2285,7 +2191,7 @@ function Home() {
             <div className="inline-flex items-center gap-2 bg-gradient-to-r from-emerald-100 to-green-100 rounded-full px-6 py-3 mb-8">
               <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
               <span className="text-emerald-700 font-semibold text-sm">
-                QUALITY MANAGEMENT
+                HỆ THỐNG
               </span>
             </div>
 
@@ -2339,7 +2245,8 @@ function Home() {
                         width="16"
                         height="16"
                         viewBox="0 0 24 24"
-                        fill="white">
+                        fill="white"
+                      >
                         <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
                       </svg>
                     </div>
@@ -2356,7 +2263,8 @@ function Home() {
                         width="16"
                         height="16"
                         viewBox="0 0 24 24"
-                        fill="white">
+                        fill="white"
+                      >
                         <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
                       </svg>
                     </div>
@@ -2371,7 +2279,8 @@ function Home() {
                         width="16"
                         height="16"
                         viewBox="0 0 24 24"
-                        fill="white">
+                        fill="white"
+                      >
                         <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
                       </svg>
                     </div>
@@ -2392,7 +2301,8 @@ function Home() {
                       width="20"
                       height="20"
                       viewBox="0 0 24 24"
-                      fill="white">
+                      fill="white"
+                    >
                       <path d="M12 2L13.09 8.26L22 9L17 14L18.18 21L12 17.77L5.82 21L7 14L2 9L8.91 8.26L12 2Z" />
                     </svg>
                   </div>
@@ -2432,7 +2342,8 @@ function Home() {
                       width="20"
                       height="20"
                       viewBox="0 0 24 24"
-                      fill="white">
+                      fill="white"
+                    >
                       <path d="M19 3H5C3.9 3 3 3.9 3 5V19C3 20.1 3.9 21 5 21H19C20.1 21 21 20.1 21 19V5C21 3.9 20.1 3 19 3ZM9 17L5 13L6.41 11.59L9 14.17L17.59 5.58L19 7L9 17Z" />
                     </svg>
                   </div>
@@ -2475,44 +2386,22 @@ function Home() {
             <h3 className="text-2xl font-bold text-center text-gray-900 mb-12">
               Quy trình phát triển với Công nghệ thông tin
             </h3>
+
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-              {[
-                {
-                  step: "01",
-                  title: "Lập kế hoạch",
-                  description: "Lập kế hoạch phát triển phần mềm",
-                  color: "emerald",
-                  icon: "📋",
-                },
-                {
-                  step: "02",
-                  title: "Phân tích & Thiết kế",
-                  description: "Phân tích và thiết kế hệ thống",
-                  color: "green",
-                  icon: "🎨",
-                },
-                {
-                  step: "03",
-                  title: "Phát triển",
-                  description: "Xây dựng hệ thống",
-                  color: "teal",
-                  icon: "⚙️",
-                },
-                {
-                  step: "04",
-                  title: "Kiểm thử & Triển khai",
-                  description: "Kiểm thử và triển khai",
-                  color: "cyan",
-                  icon: "🚀",
-                },
-              ].map((phase, index) => (
-                <div key={index} className="text-center group">
+              {steps.map((phase, index) => (
+                <div
+                  key={index}
+                  className="text-center group cursor-pointer"
+                  onClick={() => setSelectedStep(phase)}
+                >
                   <div
-                    className={`w-20 h-20 bg-gradient-to-br from-${phase.color}-500 to-${phase.color}-600 rounded-full flex items-center justify-center mx-auto mb-6 text-3xl shadow-lg group-hover:scale-110 transition-all duration-300`}>
+                    className={`w-20 h-20 bg-gradient-to-br from-${phase.color}-500 to-${phase.color}-600 rounded-full flex items-center justify-center mx-auto mb-6 text-3xl shadow-lg group-hover:scale-110 transition-all duration-300`}
+                  >
                     {phase.icon}
                   </div>
                   <div
-                    className={`text-${phase.color}-600 font-bold text-sm mb-2`}>
+                    className={`text-${phase.color}-600 font-bold text-sm mb-2`}
+                  >
                     BƯỚC {phase.step}
                   </div>
                   <h4 className="text-lg font-bold text-gray-900 mb-4">
@@ -2524,6 +2413,13 @@ function Home() {
                 </div>
               ))}
             </div>
+
+            {selectedStep && (
+              <StepModal
+                step={selectedStep}
+                onClose={() => setSelectedStep(null)}
+              />
+            )}
           </div>
         </div>
       </section>
@@ -2534,7 +2430,8 @@ function Home() {
           <div className="absolute top-20 right-20 w-64 h-64 bg-blue-200/20 rounded-full blur-3xl animate-pulse"></div>
           <div
             className="absolute bottom-20 left-20 w-80 h-80 bg-purple-200/20 rounded-full blur-3xl animate-pulse"
-            style={{ animationDelay: "1.5s" }}></div>
+            style={{ animationDelay: "1.5s" }}
+          ></div>
         </div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -2624,10 +2521,12 @@ function Home() {
             ].map((testimonial, index) => (
               <div
                 key={index}
-                className="group bg-white rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all duration-500 border border-gray-100 hover:border-gray-200 transform hover:-translate-y-2">
+                className="group bg-white rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all duration-500 border border-gray-100 hover:border-gray-200 transform hover:-translate-y-2"
+              >
                 <div className="flex items-center gap-4 mb-6">
                   <div
-                    className={`w-16 h-16 bg-gradient-to-br ${testimonial.gradient} rounded-full flex items-center justify-center text-2xl shadow-lg group-hover:scale-110 transition-transform duration-300`}>
+                    className={`w-16 h-16 bg-gradient-to-br ${testimonial.gradient} rounded-full flex items-center justify-center text-2xl shadow-lg group-hover:scale-110 transition-transform duration-300`}
+                  >
                     {testimonial.avatar}
                   </div>
                   <div>
@@ -2651,7 +2550,8 @@ function Home() {
                       height="20"
                       viewBox="0 0 24 24"
                       fill="none"
-                      className="text-yellow-400">
+                      className="text-yellow-400"
+                    >
                       <path
                         d="M12 2L15.09 8.26L22 9L17 14L18.18 21L12 17.77L5.82 21L7 14L2 9L8.91 8.26L12 2Z"
                         fill="currentColor"
@@ -2676,7 +2576,8 @@ function Home() {
           <div className="absolute top-20 left-20 w-72 h-72 bg-white/10 rounded-full blur-3xl animate-pulse"></div>
           <div
             className="absolute bottom-20 right-20 w-96 h-96 bg-white/10 rounded-full blur-3xl animate-pulse"
-            style={{ animationDelay: "2s" }}></div>
+            style={{ animationDelay: "2s" }}
+          ></div>
         </div>
 
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
@@ -2708,7 +2609,8 @@ function Home() {
                   height="16"
                   viewBox="0 0 24 24"
                   fill="none"
-                  className="text-white">
+                  className="text-white"
+                >
                   <path
                     d="M3 5A2 2 0 015 3H19A2 2 0 0121 5V19A2 2 0 0119 21H5A2 2 0 013 19V5Z"
                     stroke="currentColor"
@@ -2731,7 +2633,8 @@ function Home() {
                   height="16"
                   viewBox="0 0 24 24"
                   fill="none"
-                  className="text-white">
+                  className="text-white"
+                >
                   <path
                     d="M3 8L10.89 13.26A2 2 0 0013.11 13.26L21 8M5 19H19A2 2 0 0021 17V7A2 2 0 0019 5H5A2 2 0 003 7V17A2 2 0 005 19Z"
                     stroke="currentColor"
@@ -2760,7 +2663,7 @@ function Home() {
         </div>
       </section>
 
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 }
